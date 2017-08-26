@@ -12,9 +12,10 @@ A sample comparison between various public cloud providers when a client wants t
 * Microsoft Azure. 
 * Google Cloud Provider.
 
-1. Creating Instances in each cloud provider is deifferent. How to launch Instance in each clod provider is mentioned within each cloud provider details.
+#### STEP 1: Creating Instances in each cloud provider is deifferent. How to launch Instance in each clod provider is mentioned within each cloud provider details.
   
-2. For connecting to these instances, we can use Putty if you are using a Windows operating System or you can directly ssh into the intances if you are Using Linux, Ubuntu or Mac opersating Systems.
+
+#### STEP 2: For connecting to these instances, we can use Putty if you are using a Windows operating System or you can directly ssh into the intances if you are Using Linux, Ubuntu or Mac opersating Systems.
 * For connecting to Instances in AWS, the following syntax can be used to ssh into linux instance.
   ```
   chmod 0400 your-key-pair.pem (To modify the permissions)
@@ -28,10 +29,11 @@ A sample comparison between various public cloud providers when a client wants t
 
  * For connecting to Instances in GCP, A detailed explanation of how to connect to linux instance can be found here -> [Connecting to Linux Instance from Windows or Linux](https://cloud.google.com/compute/docs/instances/connecting-to-instance#thirdpartytools)
    
-3. Installing cassandra on these Instances or VM's.  
+
+#### STEP 3: Installing cassandra on these Instances or VM's.  
 After logging into the Intstance you need to install cassandra for setting up the cluster. The proess of installing and seting up the cassandra cluster is given below.
  
-* Oracle Java 8 and JNI are prerequisites for Cassandra v3.
+1. Oracle Java 8 and JNI are prerequisites for Cassandra v3.
   * To install Java and check wether it is properly installed or not:
 ```
 sudo apt-add-repository ppa:webupd8team/java  
@@ -41,7 +43,7 @@ java -version
 ```
   * Install JNA using: ```sudo apt-get install libjna-java -y```
 
-* For Installing Cassandra we need to setup PPA's and keys for Verification. It is done using the following commands.
+2. For Installing Cassandra we need to setup PPA's and keys for Verification. It is done using the following commands.
 ```
 echo "deb http://www.apache.org/dist/cassandra/debian 30x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list  
 echo "deb-src http://www.apache.org/dist/cassandra/debian 30x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
@@ -56,33 +58,35 @@ gpg --keyserver pgp.mit.edu --recv-keys 0353B12C
 gpg --export --armor 0353B12C | sudo apt-key add –
 ```
 
-* Now we can Install Cassandra using the following commands:
+3. Now we can Install Cassandra using the following commands:
 ```
 sudo apt-get update
 sudo apt-get install Cassandra
 ```
 
-* To check if cassandra is running: ```sudo service cassandra status ```
+  * To check if cassandra is running: ```sudo service cassandra status ```
 
-* To check the nodes: ```sudo nodetool status```
+  * To check the nodes: ```sudo nodetool status```
 
-* configuring Cassandra for Multi-Node setup:
+4. configuring Cassandra for Multi-Node setup:
 * Stop Cassandra using: ```sudo service cassandra stop```
 * Find your ethernet card interface ID using ```ifconfig```, it should be eth(x).
 
-* We need to edit Cassandra's configuration cassandra.yaml file for forming a cluster. ```sudo vim /etc/cassandra/cassandra.yaml```
-  1. Change the cluster name.
-  2. Add the IP addresses of the seed nodes.
-  3. Comment out the listen_address.
-  4. Add the listen interface.
-  5. Start the RPC service.
-  6. Set the RPC interface.
-  7. Set the endpoint snitch.
-  8. By editing the file: sudo vim /etc/cassandra/cassandra.yaml (Shown Below)
-  ![IMG](Link to the Image)
-  
-  * Now we need to delete all Cassandra previous system configurations. ```sudo rm -rf /var/lib/cassandra/data/system/```
-  * Start Cassandra: ```sudo service cassandra start```
-  * check the nodes using: ```sudo nodetool status```
-  The output of the nodetool status gives the list of nodes present in the cluster. A sample Image is shown below.
-  ![IMG](Link to the Image)
+5. We need to edit Cassandra's configuration cassandra.yaml file for configuring cassandra in a Multi-Node setup. ```sudo vim /etc/cassandra/cassandra.yaml```
+  * Change the cluster name.
+  * Add the IP addresses of the seed nodes.
+  * Comment out the listen_address.
+  * Add the listen interface.
+  * Start the RPC service.
+  * Set the RPC interface.
+  * Set the endpoint snitch.
+  * By editing the file: ```sudo vim /etc/cassandra/cassandra.yaml``` (Shown Below)
+  ![yaml file](https://user-images.githubusercontent.com/31011479/29745950-1292be3c-8a7e-11e7-91ad-48c265890fe7.png)
+ 
+* Now we need to delete all Cassandra previous system configurations. ```sudo rm -rf /var/lib/cassandra/data/system/```
+* Start Cassandra: ```sudo service cassandra start```
+* check the nodes using: ```sudo nodetool status```
+The output of the nodetool status gives the list of nodes present in the cluster. A sample Image of 3 node cluster is shown below.
+![cassandra nodes](https://user-images.githubusercontent.com/31011479/29745949-129213b0-8a7e-11e7-918d-6fde0ac694b8.png)
+
+

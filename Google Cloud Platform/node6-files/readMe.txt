@@ -1,0 +1,1 @@
+compared to 10gb benchmark instance working really fast. worked all the way till loading test640 case and after loading almost 6000000 operations out of 6445135 

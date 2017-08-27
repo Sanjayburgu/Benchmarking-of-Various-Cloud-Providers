@@ -24,8 +24,8 @@ A sample comparison between various public cloud providers when a client wants t
   A detailed explanation of how to connect to linux instance from Windows OS in AWS can be found here -> [Connecting to Linux Instance from Windows](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html)
   
 * For connecting to Instances in Microsoft Azure, the Easiest way to secure you instance is with help of a password.
-  * If you are using windows OS use putty to ssh into the instance and then authenticate with your Username and Password.
-  * If you are using Linux/Ubuntu/Mac OS use terminal to ssh into the instance and then authenticate with your Username and Password.
+  + If you are using windows OS use putty to ssh into the instance and then authenticate with your Username and Password.
+  + If you are using Linux/Ubuntu/Mac OS use terminal to ssh into the instance and then authenticate with your Username and Password.
 
  * For connecting to Instances in GCP, A detailed explanation of how to connect to linux instance can be found here -> [Connecting to Linux Instance from Windows or Linux](https://cloud.google.com/compute/docs/instances/connecting-to-instance#thirdpartytools)
    
@@ -62,15 +62,14 @@ gpg --export --armor 0353B12C | sudo apt-key add –
 ```
 sudo apt-get update
 sudo apt-get install Cassandra
-```
+```  
 
   * To check if cassandra is running: ```sudo service cassandra status ```
-
   * To check the nodes: ```sudo nodetool status```
 
 4. configuring Cassandra for Multi-Node setup:
-* Stop Cassandra using: ```sudo service cassandra stop```
-* Find your ethernet card interface ID using ```ifconfig```, it should be eth(x).
+  * Stop Cassandra using: ```sudo service cassandra stop```
+  * Find your ethernet card interface ID using ```ifconfig```, it should be eth(x).
 
 5. We need to edit Cassandra's configuration cassandra.yaml file for configuring cassandra in a Multi-Node setup. ```sudo vim /etc/cassandra/cassandra.yaml```
   * Change the cluster name.
@@ -83,10 +82,20 @@ sudo apt-get install Cassandra
   * By editing the file: ```sudo vim /etc/cassandra/cassandra.yaml``` (Shown Below)
   ![yaml file](https://user-images.githubusercontent.com/31011479/29745950-1292be3c-8a7e-11e7-91ad-48c265890fe7.png)
  
-* Now we need to delete all Cassandra previous system configurations. ```sudo rm -rf /var/lib/cassandra/data/system/```
-* Start Cassandra: ```sudo service cassandra start```
-* check the nodes using: ```sudo nodetool status```
-The output of the nodetool status gives the list of nodes present in the cluster. A sample Image of 3 node cluster is shown below.
-![cassandra nodes](https://user-images.githubusercontent.com/31011479/29745949-129213b0-8a7e-11e7-918d-6fde0ac694b8.png)
+  * Now we need to delete all Cassandra previous system configurations. ```sudo rm -rf /var/lib/cassandra/data/system/```
+  * Start Cassandra: ```sudo service cassandra start```
+  * check the nodes using: ```sudo nodetool status```
 
+6. The output of the nodetool status gives the list of nodes present in the cluster. A sample Image of 3 node cluster is shown below.  
+  ![cassandra nodes](https://user-images.githubusercontent.com/31011479/29745949-129213b0-8a7e-11e7-918d-6fde0ac694b8.png)
 
+7. Now we need to create keyspace and table for YCSB benchmark.  
+```
+CREATE KEYSPACE usertable WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3};
+use usertable;
+CREATE TABLE usertable.data ( key blob, column1 text, value blob, PRIMARY KEY (key, column1)) WITH COMPACT STORAGE AND CLUSTERING ORDER BY (column1 ASC);
+describe table data;
+```
+#### STEP 4: Installing YCSB and benchmark Cassandra.
+For installing YCSB and benchmarking cassandra, please refer to the following blog.
+[Haan Mo - Blog](http://haanmo.blogspot.com/2015/10/install-ycsb.html)
